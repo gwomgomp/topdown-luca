@@ -274,8 +274,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Obstacle>k__BackingField: {fileID: 7808471571372615825, guid: 791b0e2913e767841b762f13a0dc1b95, type: 3}
-  <Count>k__BackingField: 100
-  <Distance>k__BackingField: 10
+  <Count>k__BackingField: 50
+  <Distance>k__BackingField: 20
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,7 +444,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4198446133214510572, guid: 5ae5e8fa3b7dad04f9e6786adc26c13f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4198446133214510572, guid: 5ae5e8fa3b7dad04f9e6786adc26c13f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -532,6 +532,7 @@ GameObject:
   - component: {fileID: 1963698243}
   - component: {fileID: 1963698242}
   - component: {fileID: 1963698241}
+  - component: {fileID: 1963698245}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -616,6 +617,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1963698245
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1963698240}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 14
+  m_CollisionDetection: 0
 --- !u!1 &2011145831 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 871650330088706047, guid: 5ae5e8fa3b7dad04f9e6786adc26c13f, type: 3}
@@ -651,6 +668,7 @@ MonoBehaviour:
   <BreakingPower>k__BackingField: 2000
   <TurnRate>k__BackingField: 100
   <MaxSpeed>k__BackingField: 10
+  <JumpStrength>k__BackingField: 5
 --- !u!54 &2011145834
 Rigidbody:
   m_ObjectHideFlags: 0
