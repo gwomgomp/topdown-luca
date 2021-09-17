@@ -69,12 +69,21 @@ public class PlayerController : MonoBehaviour
     void HandleAcceleration() {
         float acceleration = Input.GetAxis("Vertical");
         float breaking = Input.GetAxis("Breaking");
-        if (breaking <= 0) {
-            float power = acceleration > 0 ? carData.Acceleration : carData.ReverseAcceleration;
-            carRigidBody.AddForce(car.transform.forward * acceleration * power * Time.deltaTime);
-        } else if (carRigidBody.velocity.magnitude > 0.5) {
-            carRigidBody.AddForce(carRigidBody.velocity.normalized * -1 * breaking * carData.BreakingPower * Time.deltaTime);
+
+        Vector3 direction = Vector3.zero;
+        float power = 0;
+        if (breaking > 0) {
+            direction = carRigidBody.velocity.normalized * -1;
+            power = breaking * carData.BreakingPower;
+        } else if (acceleration > 0) {
+            direction = car.transform.forward;
+            power = Mathf.Abs(acceleration) * carData.Acceleration;
+        } else if (acceleration < 0) {
+            direction = car.transform.forward * -1;
+            power = Mathf.Abs(acceleration) * carData.ReverseAcceleration;
         }
+
+        carRigidBody.AddForce(direction * power * Time.deltaTime);
         carRigidBody.velocity = Vector3.ClampMagnitude(carRigidBody.velocity, carData.MaxSpeed);
     }
 
