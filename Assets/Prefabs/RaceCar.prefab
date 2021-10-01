@@ -512,7 +512,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Acceleration>k__BackingField: 1500
   <ReverseAcceleration>k__BackingField: 1000
-  <BreakingPower>k__BackingField: 2000
+  <BreakingPower>k__BackingField: 1500
   <TurnRate>k__BackingField: 100
   <MaxSpeed>k__BackingField: 15
   <JumpStrength>k__BackingField: 5
