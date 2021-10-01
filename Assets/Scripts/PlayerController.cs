@@ -3,10 +3,13 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    GameObject car;
+    private GameObject carPrefab;
     [SerializeField]
-    GameObject cameraContainer;
-
+    private GameObject cameraContainer;
+    [SerializeField]
+    private MapController map;
+    
+    private GameObject car;
     private Rigidbody carRigidBody;
     private Collider carCollider;
     private CarData carData;
@@ -35,6 +38,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        car = Instantiate(carPrefab, map.startingLine.transform.position, map.startingLine.transform.rotation);
+        car.transform.Translate(Vector3.back * 5);
         carRigidBody = car.GetComponent<Rigidbody>();
         carData = car.GetComponent<CarData>();
         carBody = car.transform.Find("Body").transform;
@@ -120,6 +125,10 @@ public class PlayerController : MonoBehaviour
         if (percentageMaxSpeed <= 0.1 && resetTimer <= 0 && Input.GetButtonDown("Reset")) {
             Vector3 newPosition = car.transform.position + new Vector3(0, 5, 0);
             Quaternion newRotation = Quaternion.Euler(0, car.transform.localEulerAngles.y, 0);
+            if (map.lastCheckpoint != null) {
+                newPosition = map.lastCheckpoint.transform.position;
+                newRotation = map.lastCheckpoint.transform.rotation;
+            }
             car.transform.SetPositionAndRotation(newPosition, newRotation);
             resetTimer = resetCooldown;
         } else if (resetTimer > 0) {
