@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     private float resetTimer = 0;
     private float defaultCameraHeight;
 
+    private float currentMaxSpeed;
+    private bool playerIsInBooster = false;
+
     [SerializeField]
     private float tiltPower = 10;
     
@@ -43,6 +46,8 @@ public class PlayerController : MonoBehaviour
         car.transform.Translate(Vector3.back * 5);
         carRigidBody = car.GetComponent<Rigidbody>();
         carData = car.GetComponent<CarData>();
+        currentMaxSpeed = carData.MaxSpeed;
+        CarData.OnBoost += HandleBooster;
         carBody = car.transform.Find("Body").transform;
         defaultCameraHeight = cameraContainer.transform.position.y;
     }
@@ -74,6 +79,9 @@ public class PlayerController : MonoBehaviour
 
     void HandleAcceleration() {
         float acceleration = Input.GetAxis("Vertical");
+        if (playerIsInBooster) {
+            acceleration = carData.BoostAcceleration;
+        }
         float breaking = Input.GetAxis("Breaking");
 
         Vector3 direction = Vector3.zero;
@@ -90,7 +98,13 @@ public class PlayerController : MonoBehaviour
         }
 
         carRigidBody.AddForce(direction * power * Time.deltaTime);
-        carRigidBody.velocity = Vector3.ClampMagnitude(carRigidBody.velocity, carData.MaxSpeed);
+        if (playerIsInBooster) {
+            currentMaxSpeed = carData.MaxSpeed * carData.BoostMaxSpeedMultiplier;
+        } else if (currentMaxSpeed > carData.MaxSpeed) {
+            currentMaxSpeed = Mathf.MoveTowards(currentMaxSpeed, carData.MaxSpeed, carData.BoostDecay * Time.deltaTime);
+        }
+        Debug.Log(currentMaxSpeed);
+        carRigidBody.velocity = Vector3.ClampMagnitude(carRigidBody.velocity, currentMaxSpeed);
         OnSpeedChange(carRigidBody.velocity.magnitude);
     }
 
@@ -136,5 +150,9 @@ public class PlayerController : MonoBehaviour
         } else if (resetTimer > 0) {
             resetTimer -= Time.deltaTime;
         }
+    }
+
+    private void HandleBooster(bool inBooster) {
+        playerIsInBooster = inBooster;
     }
 }

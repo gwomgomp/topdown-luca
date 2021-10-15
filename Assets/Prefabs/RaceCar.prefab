@@ -515,6 +515,9 @@ MonoBehaviour:
   <BreakingPower>k__BackingField: 1500
   <TurnRate>k__BackingField: 100
   <MaxSpeed>k__BackingField: 15
+  <BoostDecay>k__BackingField: 5
+  <BoostAcceleration>k__BackingField: 2
+  <BoostMaxSpeedMultiplier>k__BackingField: 2
   <JumpStrength>k__BackingField: 5
 --- !u!1 &5762355858717703283
 GameObject:

@@ -27,7 +27,7 @@ public class ScoreController : MonoBehaviour
 
     private void Start() {
         MapController.OnLap += HandleLap;
-        CarData.OnCrash += HandleCrash;
+        CarData.OnCollision += HandleCrash;
         PlayerController.OnSpeedChange += HandleSpeed;
     }
 
@@ -64,7 +64,7 @@ public class ScoreController : MonoBehaviour
         bestSpeed = 0;
     }
 
-    private void HandleCrash() {
+    private void HandleCrash(Collision collision) {
         crashes += 1;
     }
 
