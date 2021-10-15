@@ -11,11 +11,11 @@ public class MapController : MonoBehaviour
     private Material inactiveMaterial;
 
     public Checkpoint startingLine;
-    [SerializeField]
     private Checkpoint[] checkpoints;
+    private int targetCheckpoint;
 
     public Checkpoint lastCheckpoint { get; private set; }
-    private Checkpoint nextCheckpoint = null;
+    private Checkpoint nextCheckpoint;
 
     public delegate void Reached(Checkpoint checkpoint);
     public static event Reached OnCheckpoint;
@@ -28,8 +28,13 @@ public class MapController : MonoBehaviour
         startingLine.SetHandler(OnCheckpoint);
         startingLine.SetMaterial(targetMaterial);
         nextCheckpoint = startingLine;
-        foreach (Checkpoint checkpoint in checkpoints)
+
+        GameObject[] checkpointObjects = GameObject.FindGameObjectsWithTag("Checkpoint");
+        checkpoints = new Checkpoint[checkpointObjects.Length];
+        for (int i = 0; i < checkpointObjects.Length; i++)
         {
+            Checkpoint checkpoint = checkpointObjects[i].GetComponent<Checkpoint>();
+            checkpoints[i] = checkpoint;
             checkpoint.SetHandler(OnCheckpoint);
         }
     }
@@ -38,32 +43,39 @@ public class MapController : MonoBehaviour
     {
         if (reachedCheckpoint.Equals(nextCheckpoint)) {
             reachedCheckpoint.SetMaterial(reachedMaterial);
+            lastCheckpoint = reachedCheckpoint;
 
             if (reachedCheckpoint.Equals(startingLine)) {
                 FinishLap();
             } else {
                 GetNextCheckpoint(reachedCheckpoint);
             }
-            lastCheckpoint = reachedCheckpoint;
-            nextCheckpoint.SetMaterial(targetMaterial);
         }
     }
 
     private void FinishLap() {
         OnLap();
-        nextCheckpoint = checkpoints[0];
+        GetNextCheckpoint(startingLine);
         foreach (Checkpoint checkpoint in checkpoints)
         {
-            checkpoint.SetMaterial(inactiveMaterial);
+            if (checkpoint != nextCheckpoint) {
+                checkpoint.SetMaterial(inactiveMaterial);
+            }
         }
     }
 
     private void GetNextCheckpoint(Checkpoint reachedCheckpoint) {
-        int index = Array.IndexOf(checkpoints, reachedCheckpoint);
-        if (index + 1 >= checkpoints.Length) {
-            nextCheckpoint = startingLine;
-        } else {
-            nextCheckpoint = checkpoints[index + 1];
+        nextCheckpoint = Array.Find(checkpoints, c => c.Index == reachedCheckpoint.Index + 1);
+        if (nextCheckpoint == null) {
+            int lowestIndex = int.MaxValue;
+            foreach (Checkpoint checkpoint in checkpoints)
+            {
+                if (checkpoint.Index < lowestIndex) {
+                    lowestIndex = checkpoint.Index;
+                    nextCheckpoint = checkpoint;
+                }
+            }
         }
+        nextCheckpoint.SetMaterial(targetMaterial);
     }
 }
