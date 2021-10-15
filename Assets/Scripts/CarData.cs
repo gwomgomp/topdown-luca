@@ -14,4 +14,13 @@ class CarData : MonoBehaviour
     public float MaxSpeed { get; private set; }
     [field: SerializeField]
     public float JumpStrength { get; private set; }
+
+    public delegate void Crashed();
+    public static event Crashed OnCrash;
+
+    private void OnCollisionEnter(Collision other) {
+        if (!other.gameObject.CompareTag("Ground")) {
+            OnCrash();
+        }
+    }
 }

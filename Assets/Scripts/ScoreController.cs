@@ -9,13 +9,18 @@ public class ScoreController : MonoBehaviour
     private Text timer;
     [SerializeField]
     private Text bestLapDisplay;
+    [SerializeField]
+    private Text crashDisplay;
 
     private int completedLaps = -1;
     private float lapTime = 0;
     private float bestLap = float.MaxValue;
 
+    private int crashes = 0;
+
     private void Start() {
         MapController.OnLap += HandleLap;
+        CarData.OnCrash += HandleCrash;
     }
 
     private void Update()
@@ -34,6 +39,8 @@ public class ScoreController : MonoBehaviour
             lapCounter.text = "-";
             bestLapDisplay.text = "-";
         }
+
+        crashDisplay.text = crashes.ToString();
     }
 
     private void HandleLap()
@@ -43,5 +50,10 @@ public class ScoreController : MonoBehaviour
             bestLap = lapTime;
         }
         lapTime = 0;
+        crashes = 0;
+    }
+
+    private void HandleCrash() {
+        crashes += 1;
     }
 }
