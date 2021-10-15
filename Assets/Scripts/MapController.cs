@@ -10,11 +10,10 @@ public class MapController : MonoBehaviour
     [SerializeField]
     private Material inactiveMaterial;
 
-    public Checkpoint startingLine;
-    private Checkpoint[] checkpoints;
-    private int targetCheckpoint;
-
+    [field: SerializeField]
+    public Checkpoint startingLine { get; private set; }
     public Checkpoint lastCheckpoint { get; private set; }
+    private Checkpoint[] checkpoints;
     private Checkpoint nextCheckpoint;
 
     public delegate void Reached(Checkpoint checkpoint);

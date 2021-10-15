@@ -11,13 +11,11 @@ public class PlayerController : MonoBehaviour
     
     private GameObject car;
     private Rigidbody carRigidBody;
-    private Collider carCollider;
     private CarData carData;
     private Transform carBody;
 
     private float resetTimer = 0;
     private float defaultCameraHeight;
-
 
     [SerializeField]
     private float tiltPower = 10;
@@ -35,6 +33,9 @@ public class PlayerController : MonoBehaviour
     private float cameraSpeed = 5;
     [SerializeField]
     private float lookAhead = 5;
+
+    public delegate void SpeedChanged(float speed);
+    public static event SpeedChanged OnSpeedChange;
 
     void Start()
     {
@@ -90,6 +91,7 @@ public class PlayerController : MonoBehaviour
 
         carRigidBody.AddForce(direction * power * Time.deltaTime);
         carRigidBody.velocity = Vector3.ClampMagnitude(carRigidBody.velocity, carData.MaxSpeed);
+        OnSpeedChange(carRigidBody.velocity.magnitude);
     }
 
     void HandleTurning(float percentageMaxSpeed) {

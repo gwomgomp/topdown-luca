@@ -11,6 +11,10 @@ public class ScoreController : MonoBehaviour
     private Text bestLapDisplay;
     [SerializeField]
     private Text crashDisplay;
+    [SerializeField]
+    private Text speedDisplay;
+    [SerializeField]
+    private Text bestSpeedDisplay;
 
     private int completedLaps = -1;
     private float lapTime = 0;
@@ -18,9 +22,13 @@ public class ScoreController : MonoBehaviour
 
     private int crashes = 0;
 
+    private float currentSpeed = 0;
+    private float bestSpeed = 0;
+
     private void Start() {
         MapController.OnLap += HandleLap;
         CarData.OnCrash += HandleCrash;
+        PlayerController.OnSpeedChange += HandleSpeed;
     }
 
     private void Update()
@@ -41,6 +49,8 @@ public class ScoreController : MonoBehaviour
         }
 
         crashDisplay.text = crashes.ToString();
+        speedDisplay.text = string.Format("{0:N2}", currentSpeed);
+        bestSpeedDisplay.text = string.Format("{0:N2}", bestSpeed);
     }
 
     private void HandleLap()
@@ -51,9 +61,17 @@ public class ScoreController : MonoBehaviour
         }
         lapTime = 0;
         crashes = 0;
+        bestSpeed = 0;
     }
 
     private void HandleCrash() {
         crashes += 1;
+    }
+
+    private void HandleSpeed(float speed) {
+        currentSpeed = speed;
+        if (speed > bestSpeed) {
+            bestSpeed = speed;
+        }
     }
 }
