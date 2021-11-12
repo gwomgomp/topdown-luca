@@ -37,23 +37,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float lookAhead = 5;
 
+    private bool initialized = false;
+
     public delegate void SpeedChanged(float speed);
     public static event SpeedChanged OnSpeedChange;
 
     void Start()
     {
-        car = Instantiate(carPrefab, map.startingLine.transform.position, map.startingLine.transform.rotation);
-        car.transform.Translate(Vector3.back * 5);
-        carRigidBody = car.GetComponent<Rigidbody>();
-        carData = car.GetComponent<CarData>();
-        currentMaxSpeed = carData.MaxSpeed;
-        CarData.OnBoost += HandleBooster;
-        carBody = car.transform.Find("Body").transform;
-        defaultCameraHeight = cameraContainer.transform.position.y;
+        if (map != null) {
+            SpawnCar(map);
+        }
     }
 
     void Update()
     {
+        if (!initialized) {
+            return;
+        }
+
         Vector3 driveDirection = new Vector3(carRigidBody.velocity.x, 0, carRigidBody.velocity.z); // disregard vertical movement
         float percentageMaxSpeed = Mathf.Clamp01(driveDirection.magnitude / carData.MaxSpeed);
         if (IsCarGrounded()) {
@@ -63,6 +64,22 @@ public class PlayerController : MonoBehaviour
         }
         UpdateCamera(percentageMaxSpeed);
         HandleReset(percentageMaxSpeed);
+    }
+
+    public void SpawnCar(MapController map) {
+        if (initialized) {
+            return;
+        }
+
+        car = Instantiate(carPrefab, map.startingLine.transform.position, map.startingLine.transform.rotation);
+        car.transform.Translate(Vector3.back * 5);
+        carRigidBody = car.GetComponent<Rigidbody>();
+        carData = car.GetComponent<CarData>();
+        currentMaxSpeed = carData.MaxSpeed;
+        CarData.OnBoost += HandleBooster;
+        carBody = car.transform.Find("Body").transform;
+        defaultCameraHeight = cameraContainer.transform.position.y;
+        initialized = true;
     }
 
     bool IsCarGrounded() {
@@ -103,7 +120,6 @@ public class PlayerController : MonoBehaviour
         } else if (currentMaxSpeed > carData.MaxSpeed) {
             currentMaxSpeed = Mathf.MoveTowards(currentMaxSpeed, carData.MaxSpeed, carData.BoostDecay * Time.deltaTime);
         }
-        Debug.Log(currentMaxSpeed);
         carRigidBody.velocity = Vector3.ClampMagnitude(carRigidBody.velocity, currentMaxSpeed);
         OnSpeedChange(carRigidBody.velocity.magnitude);
     }
