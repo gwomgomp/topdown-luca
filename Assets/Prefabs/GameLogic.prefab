@@ -295,7 +295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Obstacle>k__BackingField: {fileID: 7808471571372615825, guid: 791b0e2913e767841b762f13a0dc1b95, type: 3}
-  <Count>k__BackingField: 30
+  <Count>k__BackingField: 0
   <Distance>k__BackingField: 40
   <SafeZone>k__BackingField: 20
 --- !u!114 &2541195986157460928

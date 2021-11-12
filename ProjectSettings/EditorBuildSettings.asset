@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Slalom.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Map 2.unity
-    guid: 928a45cb2118ce34aa81ec734a35ff80
+    path: Assets/Scenes/Turns.unity
+    guid: 7ac830bd917f9ad4f86e94957a68cc54
   m_configObjects: {}

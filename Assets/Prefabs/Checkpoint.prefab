@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdbce880027d787419b5dc69e39e0a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Index>k__BackingField: 0
 --- !u!1001 &7829388485977317471
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65,6 +66,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8368529223283407538, guid: 5b89a7c7b5a3e37489e8ce7e8e6ea5a1, type: 3}
       propertyPath: m_Name
+      value: Checkpoint Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368529223283407538, guid: 5b89a7c7b5a3e37489e8ce7e8e6ea5a1, type: 3}
+      propertyPath: m_TagString
       value: Checkpoint
       objectReference: {fileID: 0}
     m_RemovedComponents: []

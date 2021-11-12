@@ -46,6 +46,8 @@ MonoBehaviour:
   mapDefinitions:
   - name: Windy Path
     mapId: Slalom
+  - name: Tight Turns
+    mapId: Turns
   buttonPrefab: {fileID: 2047668235451975648, guid: c3c581e24a5bb5748a8935204d3bf0a1, type: 3}
   horizontalButtonDistance: 20
   verticalButtonDistance: 20
