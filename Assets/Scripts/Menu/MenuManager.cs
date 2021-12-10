@@ -42,19 +42,22 @@ public class MenuManager : MonoBehaviour
         {
             yield return null;
         }
-                
-        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(currentScene);
 
-        while (!asyncLoad.isDone)
+        SceneManager.UnloadSceneAsync(currentScene);
+
+        GameObject[] rootItems = SceneManager.GetActiveScene().GetRootGameObjects();
+        foreach (GameObject rootItem in rootItems)
         {
-            yield return null;
+            Canvas canvas = rootItem.GetComponentInChildren<Canvas>();
+            if (canvas != null) {
+                createMapButtons(canvas);
+                break;
+            }
         }
 
-        createMapButtons();
     }
 
-    public void createMapButtons() {
-        GameObject canvas = GameObject.Find("Canvas");
+    public void createMapButtons(Canvas canvas) {
         int xPosition = 0;
         int yPosition = 0;
         foreach (var mapDefinition in mapDefinitions) {
