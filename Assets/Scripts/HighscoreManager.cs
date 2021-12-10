@@ -70,4 +70,12 @@ public class HighscoreManager : MonoBehaviour
         }
         return highscores[0];
     }
+
+    internal float[] GetHighscores()
+    {
+        if (!initialized) {
+            LoadHighscores();
+        }
+        return highscores;
+    }
 }
