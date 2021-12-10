@@ -18,6 +18,8 @@ public class MenuManager : MonoBehaviour
     public float horizontalButtonDistance;
     public float verticalButtonDistance;
 
+    public static string CurrentMap { get; private set; }
+
     void Update() {
         if (Input.GetButtonDown("Cancel")) {
             LoadMenu();
@@ -79,6 +81,7 @@ public class MenuManager : MonoBehaviour
     }
 
     public void LoadMap(string mapId) {
+        CurrentMap = mapId;
         StartCoroutine(LoadMapAsync(mapId));
     }
 
