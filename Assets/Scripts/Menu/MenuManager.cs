@@ -21,7 +21,7 @@ public class MenuManager : MonoBehaviour
     public static string CurrentMap { get; private set; }
 
     void Update() {
-        if (Input.GetButtonDown("Cancel")) {
+        if (CurrentMap != null && Input.GetButtonDown("Cancel")) {
             LoadMenu();
         }
     }
@@ -30,6 +30,7 @@ public class MenuManager : MonoBehaviour
     private GameObject gameLogic;
 
     public void LoadMenu() {
+        CurrentMap = null;
         StartCoroutine(LoadMenuAsync());
     }
 
