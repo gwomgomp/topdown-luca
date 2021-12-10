@@ -6,10 +6,8 @@ using UnityEngine.UI;
 
 public class HighscoreFormatter : MonoBehaviour
 {
-    [SerializeField]
-    private HighscoreManager highscoreManager;
-
     public void loadAndFormatHighscores() {
+        HighscoreManager highscoreManager = GameObject.FindObjectOfType<HighscoreManager>();
         float[] highscores = highscoreManager.GetHighscores();
         string formattedHighscores = "<b>Highscores</b>\n";
         int ranking = 1;

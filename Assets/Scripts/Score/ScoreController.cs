@@ -17,7 +17,6 @@ public class ScoreController : MonoBehaviour
     [SerializeField]
     private Text bestSpeedDisplay;
 
-    [SerializeField]
     private HighscoreManager highscoreManager;
 
     private int completedLaps = -1;
@@ -30,6 +29,7 @@ public class ScoreController : MonoBehaviour
     private float bestSpeed = 0;
 
     private void Start() {
+        highscoreManager = GameObject.FindObjectOfType<HighscoreManager>();
         MapController.OnLap += HandleLap;
         CarData.OnCollision += HandleCrash;
         PlayerController.OnSpeedChange += HandleSpeed;

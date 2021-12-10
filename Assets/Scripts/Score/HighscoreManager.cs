@@ -7,7 +7,6 @@ public class HighscoreManager : MonoBehaviour
     private float[] highscores = new float[10];
     private bool initialized = false;
 
-
     private void LoadHighscores()
     {
         System.IO.Directory.CreateDirectory(GetHighscoreFolderPath());

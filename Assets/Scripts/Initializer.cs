@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class Initializer : MonoBehaviour
 {
-    [SerializeField]
-    private MenuManager menuManager;
-
     void Start()
     {
+        MenuManager menuManager = GameObject.FindObjectOfType<MenuManager>();
         DontDestroyOnLoad(menuManager);
         menuManager.LoadMenu();
     }
