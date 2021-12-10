@@ -13,8 +13,8 @@ public class MapController : MonoBehaviour
     [field: SerializeField]
     public Checkpoint startingLine { get; private set; }
     public Checkpoint lastCheckpoint { get; private set; }
+    public Checkpoint nextCheckpoint { get; private set; }
     private Checkpoint[] checkpoints;
-    private Checkpoint nextCheckpoint;
 
     public delegate void Reached(Checkpoint checkpoint);
     public static event Reached OnCheckpoint;
@@ -24,18 +24,21 @@ public class MapController : MonoBehaviour
 
     private void Start() {
         OnCheckpoint += FindNextCheckpoint;
-        startingLine.SetHandler(OnCheckpoint);
+        checkpoints = GameObject.FindObjectsOfType<Checkpoint>();
+        InitializeCheckpoints(true);
+    }
+
+    public void InitializeCheckpoints(bool setHandler = false) {
+        for (int i = 0; i < checkpoints.Length; i++)
+        {
+            Checkpoint checkpoint = checkpoints[i];
+            checkpoint.SetMaterial(inactiveMaterial);
+            if (setHandler) {
+                checkpoint.SetHandler((checkpoint) => OnCheckpoint(checkpoint));
+            }
+        }
         startingLine.SetMaterial(targetMaterial);
         nextCheckpoint = startingLine;
-
-        GameObject[] checkpointObjects = GameObject.FindGameObjectsWithTag("Checkpoint");
-        checkpoints = new Checkpoint[checkpointObjects.Length];
-        for (int i = 0; i < checkpointObjects.Length; i++)
-        {
-            Checkpoint checkpoint = checkpointObjects[i].GetComponent<Checkpoint>();
-            checkpoints[i] = checkpoint;
-            checkpoint.SetHandler((checkpoint) => OnCheckpoint(checkpoint));
-        }
     }
 
     private void FindNextCheckpoint(Checkpoint reachedCheckpoint)

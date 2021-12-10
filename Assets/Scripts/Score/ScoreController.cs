@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,6 +29,8 @@ public class ScoreController : MonoBehaviour
     private float currentSpeed = 0;
     private float bestSpeed = 0;
 
+    private bool isRacing = false;
+
     private void Start() {
         highscoreManager = GameObject.FindObjectOfType<HighscoreManager>();
         MapController.OnLap += HandleLap;
@@ -40,7 +43,7 @@ public class ScoreController : MonoBehaviour
 
     private void Update()
     {
-        if (completedLaps >= 0) {
+        if (isRacing) {
             lapTime += Time.deltaTime;
             timer.text = string.Format("{0:N2}", lapTime);
         } else {
@@ -66,11 +69,20 @@ public class ScoreController : MonoBehaviour
 
     private void HandleLap()
     {
-        completedLaps += 1;
-        if (completedLaps > 0 && lapTime < bestLap) {
-            bestLap = lapTime;
-            StartCoroutine(SaveLap(lapTime));
+        if (isRacing) {
+            completedLaps += 1;
+            if (lapTime < bestLap) {
+                bestLap = lapTime;
+                StartCoroutine(SaveLap(lapTime));
+            }
         }
+        ResetLap();
+        isRacing = true;
+    }
+
+    public void ResetLap()
+    {
+        isRacing = false;
         lapTime = 0;
         crashes = 0;
         bestSpeed = 0;

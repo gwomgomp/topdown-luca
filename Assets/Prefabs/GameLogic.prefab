@@ -147,7 +147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25b96c5797af464399cc8b8350d3fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highscoreManager: {fileID: 3476049047940524978}
 --- !u!1 &1189827150
 GameObject:
   m_ObjectHideFlags: 0
@@ -757,6 +756,7 @@ GameObject:
   - component: {fileID: 2541195986157460929}
   - component: {fileID: 2541195986157460928}
   - component: {fileID: 3476049047940524978}
+  - component: {fileID: 2813620485965474137}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -794,7 +794,6 @@ MonoBehaviour:
   cameraContainer: {fileID: 2541195987456339447}
   debugMap: {fileID: 0}
   tiltPower: 10
-  resetCooldown: 5
   maxZoomIncrease: 20
   zoomSpeed: 10
   cameraSpeed: 20
@@ -833,7 +832,6 @@ MonoBehaviour:
   crashDisplay: {fileID: 2541195985987224010}
   speedDisplay: {fileID: 2541195987658298463}
   bestSpeedDisplay: {fileID: 2541195987393510688}
-  highscoreManager: {fileID: 3476049047940524978}
 --- !u!114 &3476049047940524978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -846,6 +844,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b75406729c6b1834298553032bbc5d31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2813620485965474137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2541195986157460932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec32c1d10be13cb4986541d1ac88668d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetCooldown: 5
 --- !u!1 &2541195986372629782
 GameObject:
   m_ObjectHideFlags: 0

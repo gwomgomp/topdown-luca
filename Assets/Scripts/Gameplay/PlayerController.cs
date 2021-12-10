@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
     private CarData carData;
     private Transform carBody;
 
-    private float resetTimer = 0;
     private float defaultCameraHeight;
 
     private float currentMaxSpeed;
@@ -22,9 +21,6 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private float tiltPower = 10;
-    
-    [SerializeField]
-    private float resetCooldown = 5;
     
     [SerializeField]
     private float maxZoomIncrease = 20;
@@ -38,8 +34,6 @@ public class PlayerController : MonoBehaviour
     private float lookAhead = 5;
 
     private bool initialized = false;
-
-    private Checkpoint resetCheckpoint = null;
 
     public delegate void SpeedChanged(float speed);
     public static event SpeedChanged OnSpeedChange;
@@ -57,15 +51,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        Vector3 driveDirection = new Vector3(carRigidBody.velocity.x, 0, carRigidBody.velocity.z); // disregard vertical movement
-        float percentageMaxSpeed = Mathf.Clamp01(driveDirection.magnitude / carData.MaxSpeed);
+        float percentageMaxSpeed = CalculatePercentageMaxSpeed();
         if (IsCarGrounded()) {
             HandleJumping();
             HandleAcceleration();
             HandleTurning(percentageMaxSpeed);
         }
         UpdateCamera(percentageMaxSpeed);
-        HandleReset(percentageMaxSpeed);
     }
 
     public void SpawnCar(MapController map) {
@@ -73,7 +65,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        MapController.OnCheckpoint += checkpoint => resetCheckpoint = checkpoint;
         car = Instantiate(carPrefab, map.startingLine.transform.position, map.startingLine.transform.rotation);
         car.transform.Translate(Vector3.back * 5);
         carRigidBody = car.GetComponent<Rigidbody>();
@@ -156,8 +147,8 @@ public class PlayerController : MonoBehaviour
         Camera.main.transform.localPosition = newCameraPosition;
     }
 
-    void HandleReset(float percentageMaxSpeed) {
-        if (percentageMaxSpeed <= 0.1 && resetTimer <= 0 && Input.GetButtonDown("Reset")) {
+    public void TriggerReset(Checkpoint resetCheckpoint, bool hardReset = false) {
+        if (hardReset || CalculatePercentageMaxSpeed() <= 0.1) {
             Vector3 newPosition;
             Quaternion newRotation;
             if (resetCheckpoint == null)  {
@@ -168,10 +159,13 @@ public class PlayerController : MonoBehaviour
                 newRotation = resetCheckpoint.transform.rotation;
             }
             car.transform.SetPositionAndRotation(newPosition, newRotation);
-            resetTimer = resetCooldown;
-        } else if (resetTimer > 0) {
-            resetTimer -= Time.deltaTime;
+            car.transform.Translate(Vector3.back * 5);
         }
+    }
+
+    private float CalculatePercentageMaxSpeed() {
+        Vector3 driveDirection = new Vector3(carRigidBody.velocity.x, 0, carRigidBody.velocity.z); // disregard vertical movement
+        return Mathf.Clamp01(driveDirection.magnitude / carData.MaxSpeed);
     }
 
     private void HandleBooster(bool inBooster) {
