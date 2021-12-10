@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,9 @@ public class ScoreController : MonoBehaviour
     [SerializeField]
     private Text bestSpeedDisplay;
 
+    [SerializeField]
+    private HighscoreManager highscoreManager;
+
     private int completedLaps = -1;
     private float lapTime = 0;
     private float bestLap = float.MaxValue;
@@ -29,6 +33,9 @@ public class ScoreController : MonoBehaviour
         MapController.OnLap += HandleLap;
         CarData.OnCollision += HandleCrash;
         PlayerController.OnSpeedChange += HandleSpeed;
+        if (highscoreManager.HasHighscore()) {
+            bestLap = highscoreManager.GetHighscore();
+        }
     }
 
     private void Update()
@@ -42,9 +49,13 @@ public class ScoreController : MonoBehaviour
 
         if (completedLaps > 0) {
             lapCounter.text = completedLaps.ToString();
-            bestLapDisplay.text = string.Format("{0:N2}", bestLap);
         } else {
             lapCounter.text = "-";
+        }
+
+        if (bestLap < float.MaxValue) {
+            bestLapDisplay.text = string.Format("{0:N2}", bestLap);
+        } else {
             bestLapDisplay.text = "-";
         }
 
@@ -58,10 +69,17 @@ public class ScoreController : MonoBehaviour
         completedLaps += 1;
         if (completedLaps > 0 && lapTime < bestLap) {
             bestLap = lapTime;
+            StartCoroutine(SaveLap(lapTime));
         }
         lapTime = 0;
         crashes = 0;
         bestSpeed = 0;
+    }
+
+    IEnumerator SaveLap(float lapTime)
+    {
+        highscoreManager.StoreLap(lapTime);
+        yield return null;
     }
 
     private void HandleCrash(Collision collision) {
