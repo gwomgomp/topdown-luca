@@ -34,7 +34,7 @@ public class MapController : MonoBehaviour
         {
             Checkpoint checkpoint = checkpointObjects[i].GetComponent<Checkpoint>();
             checkpoints[i] = checkpoint;
-            checkpoint.SetHandler(OnCheckpoint);
+            checkpoint.SetHandler((checkpoint) => OnCheckpoint(checkpoint));
         }
     }
 

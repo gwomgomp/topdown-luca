@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject cameraContainer;
     [SerializeField]
-    private MapController map;
+    private MapController debugMap;
     
     private GameObject car;
     private Rigidbody carRigidBody;
@@ -39,13 +39,15 @@ public class PlayerController : MonoBehaviour
 
     private bool initialized = false;
 
+    private Checkpoint resetCheckpoint = null;
+
     public delegate void SpeedChanged(float speed);
     public static event SpeedChanged OnSpeedChange;
 
     void Start()
     {
-        if (map != null) {
-            SpawnCar(map);
+        if (debugMap != null) {
+            SpawnCar(debugMap);
         }
     }
 
@@ -71,6 +73,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        MapController.OnCheckpoint += checkpoint => resetCheckpoint = checkpoint;
         car = Instantiate(carPrefab, map.startingLine.transform.position, map.startingLine.transform.rotation);
         car.transform.Translate(Vector3.back * 5);
         carRigidBody = car.GetComponent<Rigidbody>();
@@ -155,11 +158,14 @@ public class PlayerController : MonoBehaviour
 
     void HandleReset(float percentageMaxSpeed) {
         if (percentageMaxSpeed <= 0.1 && resetTimer <= 0 && Input.GetButtonDown("Reset")) {
-            Vector3 newPosition = car.transform.position + new Vector3(0, 5, 0);
-            Quaternion newRotation = Quaternion.Euler(0, car.transform.localEulerAngles.y, 0);
-            if (map.lastCheckpoint != null) {
-                newPosition = map.lastCheckpoint.transform.position;
-                newRotation = map.lastCheckpoint.transform.rotation;
+            Vector3 newPosition;
+            Quaternion newRotation;
+            if (resetCheckpoint == null)  {
+                newPosition = car.transform.position + new Vector3(0, 5, 0);
+                newRotation = Quaternion.Euler(0, car.transform.localEulerAngles.y, 0);
+            } else {
+                newPosition = resetCheckpoint.transform.position;
+                newRotation = resetCheckpoint.transform.rotation;
             }
             car.transform.SetPositionAndRotation(newPosition, newRotation);
             resetTimer = resetCooldown;
