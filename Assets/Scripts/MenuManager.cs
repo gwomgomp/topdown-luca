@@ -41,7 +41,12 @@ public class MenuManager : MonoBehaviour
             yield return null;
         }
                 
-        SceneManager.UnloadSceneAsync(currentScene);
+        AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(currentScene);
+
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
 
         createMapButtons();
     }
