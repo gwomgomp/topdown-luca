@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
-{
+public class PlayerController : MonoBehaviour {
     [SerializeField]
     private GameObject carPrefab;
     [SerializeField]
@@ -9,7 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private MapController debugMap;
     
-    private GameObject car;
+    public GameObject car;
     private Rigidbody carRigidBody;
     private CarData carData;
     private Transform carBody;
@@ -74,6 +73,20 @@ public class PlayerController : MonoBehaviour
         carBody = car.transform.Find("Body").transform;
         defaultCameraHeight = cameraContainer.transform.position.y;
         initialized = true;
+    }
+
+    public void SetCar(GameObject car) {
+        if (this.car != null) {
+            car.transform.SetPositionAndRotation(this.car.transform.position, this.car.transform.rotation);
+            Destroy(this.car);
+        } else {
+            car.transform.Translate(Vector3.back * 5);
+        }
+        this.car = car;
+        carRigidBody = this.car.GetComponent<Rigidbody>();
+        carData = this.car.GetComponent<CarData>();
+        currentMaxSpeed = carData.MaxSpeed;
+        carBody = this.car.transform.Find("Body").transform;
     }
 
     bool IsCarGrounded() {
