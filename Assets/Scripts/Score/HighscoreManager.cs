@@ -7,8 +7,14 @@ using UnityEngine;
 
 public class HighscoreManager : MonoBehaviour
 {
-    private float[] highscores = new float[10];
+    public int highscoreCount = 10;
+
+    private float[] highscores;
     private bool initialized = false;
+
+    private void Start() {
+        highscores = new float[highscoreCount];
+    }
 
     private void LoadHighscores()
     {
@@ -17,7 +23,7 @@ public class HighscoreManager : MonoBehaviour
         using (StreamReader reader = new StreamReader(File.Open(GetHighscoreFilePath(), FileMode.OpenOrCreate), true)) {
             string line;
             int ranking = 0;
-            while (ranking < 10 && (line = reader.ReadLine()) != null)
+            while (ranking < highscoreCount && (line = reader.ReadLine()) != null)
             {
                 highscores[ranking] = (float) Convert.ToDouble(line);
                 ranking++;
