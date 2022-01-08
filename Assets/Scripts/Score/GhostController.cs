@@ -52,6 +52,11 @@ public class GhostController : MonoBehaviour
         }
     }
 
+    internal void RestartPlayback()
+    {
+        playbackStartTime = Time.time;
+    }
+
     internal void PlayGhost(List<(Vector3, Quaternion)> ghostValues)
     {
         playbackGhostPositions = ghostValues;

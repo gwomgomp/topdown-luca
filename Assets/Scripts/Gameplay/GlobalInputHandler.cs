@@ -28,7 +28,6 @@ public class GlobalInputHandler : MonoBehaviour
         if ((hardReset || resetTimer <= 0) && Input.GetButtonDown("Reset")) {
             PlayerController player = GameObject.FindObjectOfType<PlayerController>();
             MapController map = GameObject.FindObjectOfType<MapController>();
-            ScoreController score = GameObject.FindObjectOfType<ScoreController>();
 
             Checkpoint resetCheckpoint;
             if (hardReset) {
@@ -40,7 +39,10 @@ public class GlobalInputHandler : MonoBehaviour
 
             player.TriggerReset(resetCheckpoint, hardReset);
             if (hardReset) {
+                ScoreController score = GameObject.FindObjectOfType<ScoreController>();
                 score.ResetLap();
+                GhostController ghost = GameObject.FindObjectOfType<GhostController>();
+                ghost.RestartPlayback();
             }
 
             resetTimer = resetCooldown;
