@@ -12,12 +12,12 @@ public class HighscoreManager : MonoBehaviour
     private float[] highscores;
     private bool initialized = false;
 
-    private void Start() {
-        highscores = new float[highscoreCount];
-    }
-
     private void LoadHighscores()
     {
+        if (highscores == null) {
+            highscores = new float[highscoreCount];
+        }
+
         System.IO.Directory.CreateDirectory(GetHighscoreFolderPath());
 
         using (StreamReader reader = new StreamReader(File.Open(GetHighscoreFilePath(), FileMode.OpenOrCreate), true)) {
