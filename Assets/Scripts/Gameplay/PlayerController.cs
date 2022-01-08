@@ -171,4 +171,8 @@ public class PlayerController : MonoBehaviour
     private void HandleBooster(bool inBooster) {
         playerIsInBooster = inBooster;
     }
+
+    public (Vector3, Quaternion) GetCurrentPosition() {
+        return (car.transform.position, car.transform.rotation);
+    }
 }

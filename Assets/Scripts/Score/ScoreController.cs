@@ -73,8 +73,8 @@ public class ScoreController : MonoBehaviour
             completedLaps += 1;
             if (lapTime < bestLap) {
                 bestLap = lapTime;
-                StartCoroutine(SaveLap(lapTime));
             }
+            StartCoroutine(SaveLap(lapTime));
         }
         ResetLap();
         isRacing = true;
