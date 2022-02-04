@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using System.Linq;
 
 public class MapController : MonoBehaviour
 {
@@ -15,6 +15,7 @@ public class MapController : MonoBehaviour
     public Checkpoint lastCheckpoint { get; private set; }
     public Checkpoint nextCheckpoint { get; private set; }
     private Checkpoint[] checkpoints;
+    private Checkpoint firstCheckpoint;
 
     public delegate void Reached(Checkpoint checkpoint);
     public static event Reached OnCheckpoint;
@@ -33,9 +34,7 @@ public class MapController : MonoBehaviour
     }
 
     public void InitializeCheckpoints(bool setHandler = false) {
-        for (int i = 0; i < checkpoints.Length; i++)
-        {
-            Checkpoint checkpoint = checkpoints[i];
+        foreach (var checkpoint in checkpoints) {
             checkpoint.SetMaterial(inactiveMaterial);
             if (setHandler) {
                 checkpoint.SetHandler((checkpoint) => OnCheckpoint(checkpoint));
@@ -54,14 +53,14 @@ public class MapController : MonoBehaviour
             if (reachedCheckpoint.Equals(startingLine)) {
                 FinishLap();
             } else {
-                GetNextCheckpoint(reachedCheckpoint);
+                SetNextCheckpoint(reachedCheckpoint);
             }
         }
     }
 
     private void FinishLap() {
         OnLap();
-        GetNextCheckpoint(startingLine);
+        SetNextCheckpoint(startingLine);
         foreach (Checkpoint checkpoint in checkpoints)
         {
             if (checkpoint != nextCheckpoint) {
@@ -70,18 +69,17 @@ public class MapController : MonoBehaviour
         }
     }
 
-    private void GetNextCheckpoint(Checkpoint reachedCheckpoint) {
-        nextCheckpoint = Array.Find(checkpoints, c => c.Index == reachedCheckpoint.Index + 1);
-        if (nextCheckpoint == null) {
-            int lowestIndex = int.MaxValue;
-            foreach (Checkpoint checkpoint in checkpoints)
-            {
-                if (checkpoint.Index < lowestIndex) {
-                    lowestIndex = checkpoint.Index;
-                    nextCheckpoint = checkpoint;
-                }
-            }
-        }
+    private void SetNextCheckpoint(Checkpoint reachedCheckpoint) {
+        nextCheckpoint = checkpoints.Where(c => c.Index == reachedCheckpoint.Index + 1)
+            .DefaultIfEmpty(GetFirstCheckpoint())
+            .First();
         nextCheckpoint.SetMaterial(targetMaterial);
+    }
+
+    private Checkpoint GetFirstCheckpoint() {
+        if (firstCheckpoint == null) {
+            firstCheckpoint = checkpoints.OrderBy(checkpoint => checkpoint.Index).First();
+        }
+        return firstCheckpoint;
     }
 }

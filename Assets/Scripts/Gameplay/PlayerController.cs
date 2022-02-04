@@ -3,8 +3,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    private GameObject carPrefab;
-    [SerializeField]
     private GameObject cameraContainer;
     [SerializeField]
     private MapController debugMap;

@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
 
 public class CarSelector : MonoBehaviour
 {
@@ -19,9 +16,9 @@ public class CarSelector : MonoBehaviour
         Resources.LoadAll("CarOptions");
         carOptions = Resources.FindObjectsOfTypeAll<CarOption>();
         displayCar = carOptions.Select(option  => option.Car)
-        .Select(car => Instantiate(car, DisplayPosition.transform, false))
-        .Select(car => SetupDisplayCar(car))
-        .ToArray();
+            .Select(car => Instantiate(car, DisplayPosition.transform, false))
+            .Select(car => SetupDisplayCar(car))
+            .ToArray();
         SetCar();
     }
 

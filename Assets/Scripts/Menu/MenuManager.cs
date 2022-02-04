@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 public class MenuManager : MonoBehaviour
 {
@@ -49,17 +50,10 @@ public class MenuManager : MonoBehaviour
         SceneManager.UnloadSceneAsync(currentScene);
 
         Scene menuScene = SceneManager.GetActiveScene();
-        GameObject[] rootItems = menuScene.GetRootGameObjects();
-        foreach (GameObject rootItem in rootItems)
-        {
-            Canvas canvas = rootItem.GetComponentInChildren<Canvas>();
-            if (canvas != null) {
-                createMapButtons(canvas);
-                break;
-            }
-        }
+        Canvas canvas = FindComponent<Canvas>(menuScene);
+        createMapButtons(canvas);
 
-        carSelector = FindCarSelector(menuScene);
+        carSelector = FindComponent<CarSelector>(menuScene);
     }
 
     public void createMapButtons(Canvas canvas) {
@@ -107,8 +101,8 @@ public class MenuManager : MonoBehaviour
 
         Scene mapScene = SceneManager.GetSceneByName(mapId);
         GameObject logic = Instantiate(gameLogic, Vector3.zero, Quaternion.identity);
-        PlayerController player = logic.GetComponentInChildren(typeof(PlayerController)) as PlayerController;
-        MapController map = FindMap(mapScene);
+        PlayerController player = logic.GetComponentInChildren<PlayerController>();
+        MapController map = FindComponent<MapController>(mapScene);
         CarOption carOption = carSelector.GetSelectedCar();
 
         if (map != null && player != null) {
@@ -118,23 +112,10 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    private MapController FindMap(Scene scene) {
-        foreach (var rootGameObject in scene.GetRootGameObjects()) {
-            MapController map = rootGameObject.GetComponentInChildren(typeof(MapController)) as MapController;
-            if (map != null) {
-                return map;
-            }
-        }
-        return null;
-    }
-
-    private CarSelector FindCarSelector(Scene scene) {
-        foreach (var rootGameObject in scene.GetRootGameObjects()) {
-            CarSelector selector = rootGameObject.GetComponentInChildren(typeof(CarSelector)) as CarSelector;
-            if (selector != null) {
-                return selector;
-            }
-        }
-        return null;
+    private T FindComponent<T>(Scene scene) {
+        return scene.GetRootGameObjects()
+            .Select(rootItem => rootItem.GetComponentInChildren<T>())
+            .Where(component => component != null)
+            .First();
     }
 }

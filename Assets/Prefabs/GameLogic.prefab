@@ -753,7 +753,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2541195986157460930}
   - component: {fileID: 2541195986157460931}
-  - component: {fileID: 2541195986157460929}
   - component: {fileID: 2541195986157460928}
   - component: {fileID: 3476049047940524978}
   - component: {fileID: 2813620485965474137}
@@ -791,30 +790,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f4e45503e4822846aaae1e6e78f7aea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carPrefab: {fileID: 7902095076734118826, guid: 726e219f6bd015345914982e3e4a57c3, type: 3}
   cameraContainer: {fileID: 2541195987456339447}
   debugMap: {fileID: 0}
+  debugCar: {fileID: 0}
   tiltPower: 10
   maxZoomIncrease: 20
   zoomSpeed: 10
   cameraSpeed: 20
   lookAhead: 15
---- !u!114 &2541195986157460929
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2541195986157460932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bb69b68125b8cd4f8c083c78e1f0d1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Obstacle>k__BackingField: {fileID: 7808471571372615825, guid: 791b0e2913e767841b762f13a0dc1b95, type: 3}
-  <Count>k__BackingField: 0
-  <Distance>k__BackingField: 40
-  <SafeZone>k__BackingField: 20
 --- !u!114 &2541195986157460928
 MonoBehaviour:
   m_ObjectHideFlags: 0

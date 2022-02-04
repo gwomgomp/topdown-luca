@@ -1,22 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using System.Linq;
 
 public class HighscoreFormatter : MonoBehaviour
 {
     public void loadAndFormatHighscores() {
         HighscoreManager highscoreManager = GameObject.FindObjectOfType<HighscoreManager>();
         float[] highscores = highscoreManager.GetHighscores();
-        string formattedHighscores = "<b>Highscores</b>\n";
-        int ranking = 1;
-        foreach (float highscore in highscores)
-        {
-            if (highscore > 0) {
-                formattedHighscores += string.Format("{0}: {1:N2}\n", ranking++, highscore);
-            }
-        }
+
+        string formattedHighscores = highscores.Where(highscore => highscore > 0)
+            .Zip(Enumerable.Range(1, highscores.Length), (highscore, ranking) => string.Format("{0}: {1:N2}", ranking, highscore))
+            .Prepend("<b>Highscores</b>")
+            .Aggregate((first, second) => $"{first}\n{second}");
+
         gameObject.GetComponent<TextMeshProUGUI>().text = formattedHighscores;
     }
 }
