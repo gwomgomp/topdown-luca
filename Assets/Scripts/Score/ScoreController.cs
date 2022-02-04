@@ -34,11 +34,17 @@ public class ScoreController : MonoBehaviour
     private void Start() {
         highscoreManager = GameObject.FindObjectOfType<HighscoreManager>();
         MapController.OnLap += HandleLap;
-        CarData.OnCollision += HandleCrash;
+        CarEvents.OnCollision += HandleCrash;
         PlayerController.OnSpeedChange += HandleSpeed;
         if (highscoreManager.HasHighscore()) {
             bestLap = highscoreManager.GetHighscore();
         }
+    }
+
+    private void OnDestroy() {
+        MapController.OnLap -= HandleLap;
+        CarEvents.OnCollision -= HandleCrash;
+        PlayerController.OnSpeedChange -= HandleSpeed;
     }
 
     private void Update()

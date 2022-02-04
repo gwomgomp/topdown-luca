@@ -18,6 +18,8 @@ public class MenuManager : MonoBehaviour
     public float horizontalButtonDistance;
     public float verticalButtonDistance;
 
+    private CarSelector carSelector;
+
     public static string CurrentMap { get; private set; }
 
     void Update() {
@@ -46,7 +48,8 @@ public class MenuManager : MonoBehaviour
 
         SceneManager.UnloadSceneAsync(currentScene);
 
-        GameObject[] rootItems = SceneManager.GetActiveScene().GetRootGameObjects();
+        Scene menuScene = SceneManager.GetActiveScene();
+        GameObject[] rootItems = menuScene.GetRootGameObjects();
         foreach (GameObject rootItem in rootItems)
         {
             Canvas canvas = rootItem.GetComponentInChildren<Canvas>();
@@ -56,6 +59,7 @@ public class MenuManager : MonoBehaviour
             }
         }
 
+        carSelector = FindCarSelector(menuScene);
     }
 
     public void createMapButtons(Canvas canvas) {
@@ -105,9 +109,10 @@ public class MenuManager : MonoBehaviour
         GameObject logic = Instantiate(gameLogic, Vector3.zero, Quaternion.identity);
         PlayerController player = logic.GetComponentInChildren(typeof(PlayerController)) as PlayerController;
         MapController map = FindMap(mapScene);
+        CarOption carOption = carSelector.GetSelectedCar();
 
         if (map != null && player != null) {
-            player.SpawnCar(map);
+            player.SpawnCar(carOption, map);
         } else {
             Debug.LogError("Couldn't load map or player");
         }
@@ -118,6 +123,16 @@ public class MenuManager : MonoBehaviour
             MapController map = rootGameObject.GetComponentInChildren(typeof(MapController)) as MapController;
             if (map != null) {
                 return map;
+            }
+        }
+        return null;
+    }
+
+    private CarSelector FindCarSelector(Scene scene) {
+        foreach (var rootGameObject in scene.GetRootGameObjects()) {
+            CarSelector selector = rootGameObject.GetComponentInChildren(typeof(CarSelector)) as CarSelector;
+            if (selector != null) {
+                return selector;
             }
         }
         return null;

@@ -8,10 +8,12 @@ public class PlayerController : MonoBehaviour
     private GameObject cameraContainer;
     [SerializeField]
     private MapController debugMap;
+    [SerializeField]
+    private CarOption debugCar;
     
     private GameObject car;
     private Rigidbody carRigidBody;
-    private CarData carData;
+    private CarOption carData;
     private Transform carBody;
 
     private float defaultCameraHeight;
@@ -41,7 +43,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         if (debugMap != null) {
-            SpawnCar(debugMap);
+            SpawnCar(debugCar, debugMap);
         }
     }
 
@@ -60,17 +62,21 @@ public class PlayerController : MonoBehaviour
         UpdateCamera(percentageMaxSpeed);
     }
 
-    public void SpawnCar(MapController map) {
+    private void OnDestroy() {
+        CarEvents.OnBoost -= HandleBooster;
+    }
+
+    public void SpawnCar(CarOption carOption, MapController map) {
         if (initialized) {
             return;
         }
 
-        car = Instantiate(carPrefab, map.startingLine.transform.position, map.startingLine.transform.rotation);
+        car = Instantiate(carOption.Car, map.startingLine.transform.position, map.startingLine.transform.rotation);
         car.transform.Translate(Vector3.back * 5);
         carRigidBody = car.GetComponent<Rigidbody>();
-        carData = car.GetComponent<CarData>();
+        carData = carOption;
         currentMaxSpeed = carData.MaxSpeed;
-        CarData.OnBoost += HandleBooster;
+        CarEvents.OnBoost += HandleBooster;
         carBody = car.transform.Find("Body").transform;
         defaultCameraHeight = cameraContainer.transform.position.y;
         initialized = true;
@@ -124,10 +130,11 @@ public class PlayerController : MonoBehaviour
             float forward = Mathf.Sign(Vector3.Dot(car.transform.forward, carRigidBody.velocity.normalized));
             car.transform.Rotate(car.transform.up, steering * carData.TurnRate * Time.deltaTime * forward);
         }
+        float tilt = steering * tiltPower * percentageMaxSpeed;
         carBody.localEulerAngles = new Vector3(
-            steering * tiltPower * percentageMaxSpeed,
-            carBody.localEulerAngles.y,
-            carBody.localEulerAngles.z
+            carData.TiltAxis == "x" ? tilt : carBody.localEulerAngles.x,
+            carData.TiltAxis == "y" ? tilt : carBody.localEulerAngles.y,
+            carData.TiltAxis == "z" ? tilt : carBody.localEulerAngles.z
         );
     }
 

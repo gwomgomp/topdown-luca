@@ -1,6 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-class CarData : MonoBehaviour
+[CreateAssetMenu(fileName = "Create new car option")]
+public class CarOption : ScriptableObject
 {
     [field: SerializeField]
     public float Acceleration { get; private set; }
@@ -20,28 +23,8 @@ class CarData : MonoBehaviour
     public float BoostMaxSpeedMultiplier { get; private set; }
     [field: SerializeField]
     public float JumpStrength { get; private set; }
-
-    public delegate void Collided(Collision collision);
-    public static event Collided OnCollision;
-
-    public delegate void Boosted(bool inBooster);
-    public static event Boosted OnBoost;
-
-    private void OnCollisionEnter(Collision collision) {
-        if (!collision.gameObject.CompareTag("Ground")) {
-            OnCollision(collision);
-        }
-    }
-
-    private void OnTriggerEnter(Collider collider) {
-        if (collider.gameObject.CompareTag("Booster")) {
-            OnBoost(true);
-        }
-    }
-
-    private void OnTriggerExit(Collider collider) {
-        if (collider.gameObject.CompareTag("Booster")) {
-            OnBoost(false);
-        }
-    }
+    [field: SerializeField]
+    public string TiltAxis { get; private set; }
+    [field: SerializeField]
+    public GameObject Car { get; private set; }
 }

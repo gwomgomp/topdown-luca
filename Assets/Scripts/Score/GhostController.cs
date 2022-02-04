@@ -29,6 +29,10 @@ public class GhostController : MonoBehaviour
         ghostCar = Instantiate(ghostCarPrefab);
     }
 
+    private void OnDestroy() {
+        MapController.OnLap -= StartGhostRecording;
+    }
+
     private void StartGhostRecording()
     {
         recording = false;

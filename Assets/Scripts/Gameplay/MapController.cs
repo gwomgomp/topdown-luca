@@ -28,6 +28,10 @@ public class MapController : MonoBehaviour
         InitializeCheckpoints(true);
     }
 
+    private void OnDestroy() {
+        OnCheckpoint -= FindNextCheckpoint;
+    }
+
     public void InitializeCheckpoints(bool setHandler = false) {
         for (int i = 0; i < checkpoints.Length; i++)
         {
