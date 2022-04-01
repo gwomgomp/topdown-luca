@@ -28,6 +28,8 @@ public class CarSelector : MonoBehaviour
         foreach (var ps in car.GetComponentsInChildren<ParticleSystem>()) {
          Destroy(ps);
         }
+        Destroy(car.GetComponentInChildren<EngineAudioGenerator>());
+        Destroy(car.GetComponentInChildren<EngineAudioLooper>());
         car.SetActive(false);
         return car;
     }
