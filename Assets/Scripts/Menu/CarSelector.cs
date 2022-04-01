@@ -36,12 +36,12 @@ public class CarSelector : MonoBehaviour
         displayCar[currentCarIndex].SetActive(false);
         if (next) {
             currentCarIndex += 1;
-            if (currentCarIndex  >= carOptions.Length) {
+            if (currentCarIndex >= carOptions.Length) {
                 currentCarIndex = 0;
             }
         } else {
             currentCarIndex -= 1;
-            if (currentCarIndex <= 0) {
+            if (currentCarIndex < 0) {
                 currentCarIndex = carOptions.Length - 1;
             }
         }
